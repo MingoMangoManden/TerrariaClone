@@ -31,7 +31,7 @@ public class Sun extends Entity {
 	
 	@Override
 	public void update(int MOUSE_X, int MOUSE_Y) {
-		if (updatesSinceLastUpdate == 10) {
+		if (updatesSinceLastUpdate == speed) {
 			X += 1;
 			Y += 1;
 			updatesSinceLastUpdate = 0;

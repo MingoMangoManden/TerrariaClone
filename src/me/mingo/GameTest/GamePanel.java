@@ -5,13 +5,17 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import me.mingo.GameTest.Utils.InputMaster;
 import me.mingo.GameTest.Utils.Utils;
@@ -25,9 +29,9 @@ public class GamePanel extends JPanel implements Runnable {
 	//	CONSTANT VARIABLES	//
 	//						//
 	//////////////////////////
-	public static final int tileSize = 16;
-	public static final int tilesHorizontal = tileSize * Window.WIDTH;
-	public static final int tilesVertical = tileSize * Window.HEIGHT;
+	public static int tileSize = 16;
+	public static int tilesHorizontal = tileSize * Window.WIDTH;
+	public static int tilesVertical = tileSize * Window.HEIGHT;
 	
 	final double UPDATE_TIME = 1.0/60.0;
 	
@@ -41,11 +45,15 @@ public class GamePanel extends JPanel implements Runnable {
 	//						//
 	//////////////////////////
 	
+	boolean testMode = true;
 	
 	// world generation
 	long seed = new Random().nextLong();
-	int worldSize = 100;
+	int worldSize = 1000;
 	World world = new World(seed, worldSize);
+	
+	double frequency = 10;
+	double smoothness = 0.05;
 	
 	// time
 	int TIME = 0;
@@ -61,7 +69,11 @@ public class GamePanel extends JPanel implements Runnable {
 		Color skyBlue = new Color(0, 181, 226);
 		setBackground(skyBlue); // paint da sky
 		
-		initialize();
+		loadWorld();
+		
+		if (testMode) {
+			engageTestMode();
+		}
 		
 		//addMouseMotionListener(new InputMaster());
 		//addKeyListener(new InputMaster());
@@ -70,12 +82,81 @@ public class GamePanel extends JPanel implements Runnable {
 		start();
 	}
 	
-	private void initialize() {
+	private void loadWorld() {
 		System.out.println("Loading world with seed " + seed);
-		world.generate(10, 0.1, 0.75);
+		world.generate(frequency, smoothness);
 		
 		System.out.println("Loading entities...");
 		world.spawnStartingEntities();
+		
+		Utils.saveWorldData(world);
+	}
+	
+	//////////////////
+	//				//
+	//	Test Mode	//
+	//				//
+	//////////////////
+	private void engageTestMode() {
+		// multiplier
+		JSlider frequencySlider = new JSlider();
+		frequencySlider.setToolTipText("Change multiplier");
+		frequencySlider.setMinimum(0);
+		frequencySlider.setMaximum(100);
+		frequencySlider.setValue((int) frequency);
+		frequencySlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				frequency = frequencySlider.getValue();
+				world.generate(frequency, smoothness);
+			}
+		});
+		add(frequencySlider);
+		
+		// smoothness
+		JSlider smoothnessSlider = new JSlider();
+		smoothnessSlider.setToolTipText("Change smoothness");
+		smoothnessSlider.setMinimum(0);
+		smoothnessSlider.setMaximum(10);
+		smoothnessSlider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				smoothness = smoothnessSlider.getValue()*0.01;
+				world.generate(frequency, smoothness);
+			}
+		});
+		add(smoothnessSlider);
+		
+		// zoom
+		JButton zoomIn = new JButton("Zoom In");
+		zoomIn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				zoom(1);
+				
+				// update tiles
+				tilesHorizontal = tileSize * Window.WIDTH;
+				tilesVertical = tileSize * Window.HEIGHT;
+			}
+		});
+		add(zoomIn);
+		
+		JButton zoomOut = new JButton("Zoom Out");
+		zoomOut.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				zoom(-1);
+				
+				// update tiles
+				tilesHorizontal = tileSize * Window.WIDTH;
+				tilesVertical = tileSize * Window.HEIGHT;
+			}
+		});
+		add(zoomOut);
+	}
+	
+	private void zoom(int intensity) {
+		tileSize += intensity;
 	}
 	
 	//////////////////////////
@@ -175,6 +256,6 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		// draw giant string
 		g2.setFont(new Font("Comic Sans MS", 0, 64));
-		g2.drawString("Game of Blocks", (int) (Window.WIDTH*0.35), 200);
+		g2.drawString("Block world?", (int) (Window.WIDTH*0.35), 200);
 	}
 }

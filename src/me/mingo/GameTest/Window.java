@@ -15,7 +15,6 @@ public class Window extends JFrame {
 	public Window() {
 		loadSettings();
 		setSize(WIDTH, HEIGHT);
-		//setVisible(true);
 		
 		gamePanel = new GamePanel();
 		add(gamePanel);
@@ -23,14 +22,11 @@ public class Window extends JFrame {
 	}
 	
 	private void loadSettings() {
-		String[] SUFFIXES = new String[] {
-				"This is probably a game with nice graphics!",
-				"An amazing block game!"
-		};
-		int num = new Random().nextInt(SUFFIXES.length);
-		String TITLE = "Some game: " + SUFFIXES[num];
+		String englishTitle = "Block World - Version 1.0";
+		String japaneseTitle = "ブロックワールド・バージョン 1.0";
+		String danishTitle = "Blok Verden - Version 1.0";
 		
-		setTitle(TITLE);
+		setTitle(japaneseTitle);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setResizable(false); // enabled sometimes for testing purposes
 		

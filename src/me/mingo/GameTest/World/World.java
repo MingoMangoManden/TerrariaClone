@@ -42,20 +42,20 @@ public class World {
 		entities.add(new Sun(50, 150, sunMovementSpeed));
 	}
 	
-	public void generate(double multiplier, double smoothness, double frequency) {
+	public void generate(double multiplier, double smoothness) {
 		blocks = new Block[size];
 		
 		// noise.noise(i)
 		for (int x = 0; x < size; x++) {
 			//((noise.eval(x, 0)*multiplier)+minimumGroundLevel)
-			double height = (pixelCrustLevel-(noise.eval(x*smoothness, 0)*multiplier)*GamePanel.tileSize)*frequency;
+			double height = (pixelCrustLevel-(noise.eval(x*smoothness, 0)*multiplier)*GamePanel.tileSize)*0.75;
 			
 			// if block is under world, level it
 			if (height >= pixelCrustLevel) {
 				height = pixelCrustLevel;
 			}
 			
-			System.out.println((int) height);
+			//System.out.println((int) height);
 			
 			blocks[x] = new Block(new Location(x, (int) height), Material.DIRT);
 		}
@@ -73,6 +73,10 @@ public class World {
 			// under ground tiles
 			Color dirtColor = new Color(139, 69, 19);
 			g2.setColor(dirtColor);
+			
+			int undergroundTilesCount = (int) (Window.HEIGHT-blocks[i].loc.y);
+			//System.out.println(undergroundTilesCount);
+			
 			for (int j = 1; j < 20; j++) {
 				g2.fillRect(i*GamePanel.tileSize, blocks[i].loc.y+(j*GamePanel.tileSize), GamePanel.tileSize, GamePanel.tileSize);
 			}

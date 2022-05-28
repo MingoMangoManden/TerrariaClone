@@ -1,5 +1,7 @@
 package me.mingo.GameTest;
 
+import me.mingo.GameTest.Utils.Utils;
+
 public class Game {
 	
 	Window window;
@@ -11,9 +13,11 @@ public class Game {
 	private void init() {
 		// Load textures
 		
+		Utils.initializeGameData();
+		//Utils.outputError("TEST ERROR");
+		
 		// Create Window
 		Window window = new Window();
-		
 		window.setLocationRelativeTo(null);
 	}
 	

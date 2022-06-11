@@ -16,10 +16,12 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import me.mingo.GameTest.Utils.InputMaster;
+import me.mingo.GameTest.Utils.Keyboard;
+import me.mingo.GameTest.Utils.Mouse;
 import me.mingo.GameTest.Utils.Utils;
 import me.mingo.GameTest.World.World;
 import me.mingo.GameTest.entities.Entity;
+import me.mingo.GameTest.entities.Player;
 
 public class GamePanel extends JPanel implements Runnable {
 	
@@ -59,6 +61,9 @@ public class GamePanel extends JPanel implements Runnable {
 	// time
 	int TIME = 0;
 	
+	// player
+	public static int playerSpeed = 2;
+	
 	//////////////////////////////
 	//							//
 	//	Game Panel constructor	//
@@ -67,7 +72,9 @@ public class GamePanel extends JPanel implements Runnable {
 	public GamePanel() {
 		setPreferredSize(new Dimension(Window.WIDTH, Window.HEIGHT));
 		
-		addMouseListener(new InputMaster());
+		addMouseListener(new Mouse());
+		addKeyListener(new Keyboard());
+		setFocusable(true);
 		
 		Color skyBlue = new Color(0, 181, 226);
 		setBackground(skyBlue); // paint da sky
@@ -77,10 +84,6 @@ public class GamePanel extends JPanel implements Runnable {
 		if (testMode) {
 			engageTestMode();
 		}
-		
-		//addMouseMotionListener(new InputMaster());
-		//addKeyListener(new InputMaster());
-		//addMouseListener(new InputMaster());
 		
 		start();
 	}
@@ -224,17 +227,12 @@ public class GamePanel extends JPanel implements Runnable {
 	//							//
 	//////////////////////////////
 	public void update() {
-		InputMaster.updateMousePosition();
-		
-		int mouseX = InputMaster.MOUSE_X;
-		int mouseY = InputMaster.MOUSE_Y;
-		
-		// PUT THIS STUFF IN an_entity.update
+		Mouse.updateMousePosition();
 		
 		for (int i = 0; i < world.entities.size(); i++) {
 			Entity entity = world.entities.get(i);
 			
-			entity.update(mouseX, mouseY);
+			entity.update();
 		}
 	}
 	

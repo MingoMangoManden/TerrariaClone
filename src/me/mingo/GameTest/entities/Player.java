@@ -3,17 +3,21 @@ package me.mingo.GameTest.entities;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import me.mingo.GameTest.Utils.Keyboard;
+
 public class Player extends Entity {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private int X, Y;
 	private int size;
+	private int speed;
 	
-	public Player(int startingX, int startingY, int size) {
+	public Player(int startingX, int startingY, int size, int speed) {
 		this.X = startingX;
 		this.Y = startingY;
 		this.size = size;
+		this.speed = speed;
 	}
 
 	@Override
@@ -24,8 +28,22 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public void update(int MOUSE_X, int MOUSE_Y) {
-		// TODO Auto-generated method stub
+	public void update() {
+		if (Keyboard.wPressed) {
+			Y -= speed;
+		}
+		if (Keyboard.aPressed) {
+			X -= speed;
+		}
+		if (Keyboard.sPressed) {
+			Y += speed;
+		}
+		if (Keyboard.dPressed) {
+			X += speed;
+		}
+	}
+	
+	void jump() {
 		
 	}
 
@@ -38,6 +56,10 @@ public class Player extends Entity {
 	public int getY() {
 		return Y;
 	}
+	
+	public int getSpeed() {
+		return speed;
+	}
 
 	@Override
 	public void setX(int newX) {
@@ -47,6 +69,10 @@ public class Player extends Entity {
 	@Override
 	public void setY(int newY) {
 		Y = newY;
+	}
+	
+	public void setSpeed(int newSpeed) {
+		speed = newSpeed;
 	}
 
 }

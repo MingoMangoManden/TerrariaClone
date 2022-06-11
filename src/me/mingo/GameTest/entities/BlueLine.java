@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import me.mingo.GameTest.GamePanel;
+import me.mingo.GameTest.Utils.Mouse;
 
 public class BlueLine extends Entity {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private int X, Y;
+	private int speed;
 	
 	public BlueLine() {
 	}
@@ -32,8 +34,8 @@ public class BlueLine extends Entity {
 	}
 	
 	@Override
-	public void update(int MOUSE_X, int MOUSE_Y) {
-		this.setY(MOUSE_Y - GamePanel.tileSize/2);
+	public void update() {
+		this.setY(Mouse.MOUSE_Y - GamePanel.tileSize/2);
 	}
 
 	@Override
@@ -45,6 +47,11 @@ public class BlueLine extends Entity {
 	public int getY() {
 		return Y;
 	}
+	
+	@Override
+	public int getSpeed() {
+		return speed;
+	}
 
 	@Override
 	public void setX(int newX) {
@@ -54,6 +61,11 @@ public class BlueLine extends Entity {
 	@Override
 	public void setY(int newY) {
 		Y = newY;
+	}
+
+	@Override
+	public void setSpeed(int newSpeed) {
+		speed = newSpeed;
 	}
 
 }

@@ -1,5 +1,6 @@
 package me.mingo.GameTest;
 
+import me.mingo.GameTest.Utils.Keyboard;
 import me.mingo.GameTest.Utils.Utils;
 
 public class Game {

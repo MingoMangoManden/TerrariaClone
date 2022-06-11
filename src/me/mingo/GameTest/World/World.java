@@ -39,8 +39,8 @@ public class World implements Serializable {
 		
 		//entities.add(new RedLine());
 		//entities.add(new BlueLine());
+		entities.add(new Player(100, 100, GamePanel.tileSize, GamePanel.playerSpeed));
 		entities.add(new Sun(50, 150, sunMovementSpeed));
-		entities.add(new Player(100, 100, GamePanel.tileSize));
 	}
 	
 	public void generate(double multiplier, double smoothness) {

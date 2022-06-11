@@ -32,7 +32,7 @@ public class Sun extends Entity {
 	}
 	
 	@Override
-	public void update(int MOUSE_X, int MOUSE_Y) {
+	public void update() {
 		if (updatesSinceLastUpdate == speed) {
 			X += 1;
 			Y += 1;
@@ -52,6 +52,11 @@ public class Sun extends Entity {
 	public int getY() {
 		return Y;
 	}
+	
+	@Override
+	public int getSpeed() {
+		return speed;
+	}
 
 	@Override
 	public void setX(int newX) {
@@ -61,6 +66,11 @@ public class Sun extends Entity {
 	@Override
 	public void setY(int newY) {
 		Y = newY;
+	}
+
+	@Override
+	public void setSpeed(int newSpeed) {
+		speed = newSpeed;
 	}
 
 }

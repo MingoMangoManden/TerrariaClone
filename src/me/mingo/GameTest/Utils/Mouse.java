@@ -7,7 +7,7 @@ import javax.swing.event.MouseInputListener;
 
 import java.awt.MouseInfo;
 
-public class InputMaster implements MouseInputListener {
+public class Mouse implements MouseInputListener {
 	
 	public static int MOUSE_X, MOUSE_Y;
 

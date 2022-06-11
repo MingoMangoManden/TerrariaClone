@@ -16,6 +16,8 @@ import me.mingo.GameTest.entities.Sun;
 
 public class World implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+	
 	long seed;
 	int size;
 	

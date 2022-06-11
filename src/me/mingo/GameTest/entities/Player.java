@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 
 public class Player extends Entity {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private int X, Y;
 	private int size;
 	

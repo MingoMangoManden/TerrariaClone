@@ -8,6 +8,8 @@ import java.awt.Color;
 
 public class Sun extends Entity {
 	
+	private static final long serialVersionUID = 1L;
+
 	private int X, Y;
 	
 	// the speed is how much time can pass without the sun moving

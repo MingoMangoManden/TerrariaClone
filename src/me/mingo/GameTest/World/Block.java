@@ -6,6 +6,8 @@ import me.mingo.GameTest.Utils.Location;
 
 public class Block implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+	
 	public Location loc;
 	public Material mat;
 	

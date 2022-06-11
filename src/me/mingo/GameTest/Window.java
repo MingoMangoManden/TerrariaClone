@@ -1,10 +1,10 @@
 package me.mingo.GameTest;
 
-import java.util.Random;
-
 import javax.swing.JFrame;
 
 public class Window extends JFrame {
+	
+	private static final long serialVersionUID = 1L;
 	
 	//public static int WIDTH = 1440;
 	public static int WIDTH = 1616;
@@ -23,10 +23,9 @@ public class Window extends JFrame {
 	
 	private void loadSettings() {
 		String englishTitle = "Block World - Version 1.0";
-		String japaneseTitle = "ブロックワールド・バージョン 1.0";
-		String danishTitle = "Blok Verden - Version 1.0";
+		//String japaneseTitle = "ブロックワールド・バージョン 1.0";
 		
-		setTitle(japaneseTitle);
+		setTitle(englishTitle);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setResizable(false); // enabled sometimes for testing purposes
 		

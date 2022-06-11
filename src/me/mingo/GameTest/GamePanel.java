@@ -2,7 +2,6 @@ package me.mingo.GameTest;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -23,6 +22,8 @@ import me.mingo.GameTest.World.World;
 import me.mingo.GameTest.entities.Entity;
 
 public class GamePanel extends JPanel implements Runnable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	//////////////////////////
 	//						//
@@ -257,7 +258,7 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 		
 		// draw giant string
-		g2.setFont(new Font("Comic Sans MS", 0, 64));
-		g2.drawString("Block world?", (int) (Window.WIDTH*0.35), 200);
+		//g2.setFont(new Font("Comic Sans MS", 0, 64));
+		//g2.drawString("Block world?", (int) (Window.WIDTH*0.35), 200);
 	}
 }

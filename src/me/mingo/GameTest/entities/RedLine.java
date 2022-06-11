@@ -7,6 +7,8 @@ import me.mingo.GameTest.GamePanel;
 
 public class RedLine extends Entity {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private int X, Y;
 	
 	public RedLine() {

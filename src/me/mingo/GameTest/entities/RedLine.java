@@ -7,14 +7,9 @@ import me.mingo.GameTest.GamePanel;
 
 public class RedLine extends Entity {
 	
-	private int tileSize;
-	private int tilesVertical;
-	
 	private int X, Y;
 	
 	public RedLine() {
-		tileSize = GamePanel.tileSize;
-		tilesVertical = GamePanel.tilesVertical;
 	}
 	
 	@Override
@@ -22,8 +17,8 @@ public class RedLine extends Entity {
 		
 		g.setColor(Color.RED);
 		
-		for (int i = 0; i < tilesVertical; i++) {
-			g.fillRect(X, i*tileSize, tileSize, tileSize);
+		for (int i = 0; i < GamePanel.tilesVertical; i++) {
+			g.fillRect(X, i*GamePanel.tileSize, GamePanel.tileSize, GamePanel.tileSize);
 		}
 		
 		// if line hits border
@@ -36,7 +31,7 @@ public class RedLine extends Entity {
 	
 	@Override
 	public void update(int MOUSE_X, int MOUSE_Y) {
-		setX(MOUSE_X - tileSize/2);
+		setX(MOUSE_X - GamePanel.tileSize/2);
 	}
 	
 	@Override

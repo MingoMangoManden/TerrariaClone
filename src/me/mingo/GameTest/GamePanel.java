@@ -45,7 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
 	//						//
 	//////////////////////////
 	
-	boolean testMode = true;
+	boolean testMode = false;
 	
 	// world generation
 	long seed = new Random().nextLong();
@@ -65,6 +65,8 @@ public class GamePanel extends JPanel implements Runnable {
 	//////////////////////////////
 	public GamePanel() {
 		setPreferredSize(new Dimension(Window.WIDTH, Window.HEIGHT));
+		
+		addMouseListener(new InputMaster());
 		
 		Color skyBlue = new Color(0, 181, 226);
 		setBackground(skyBlue); // paint da sky
@@ -89,7 +91,7 @@ public class GamePanel extends JPanel implements Runnable {
 		System.out.println("Loading entities...");
 		world.spawnStartingEntities();
 		
-		Utils.saveWorldData(world);
+		//Utils.saveWorldData(world);
 	}
 	
 	//////////////////

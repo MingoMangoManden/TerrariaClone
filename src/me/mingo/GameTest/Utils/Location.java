@@ -1,6 +1,8 @@
 package me.mingo.GameTest.Utils;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
 	
 	public int x, y;
 	

@@ -1,8 +1,10 @@
 package me.mingo.GameTest.World;
 
+import java.io.Serializable;
+
 import me.mingo.GameTest.Utils.Location;
 
-public class Block {
+public class Block implements Serializable {
 	
 	public Location loc;
 	public Material mat;

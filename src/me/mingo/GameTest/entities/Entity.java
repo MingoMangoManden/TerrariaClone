@@ -1,8 +1,9 @@
 package me.mingo.GameTest.entities;
 
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
-public abstract class Entity {
+public abstract class Entity implements Serializable {
 	
 	public abstract void draw(Graphics2D g);
 	public abstract void update(int MOUSE_X, int MOUSE_Y);

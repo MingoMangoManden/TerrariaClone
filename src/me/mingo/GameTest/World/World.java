@@ -2,7 +2,7 @@ package me.mingo.GameTest.World;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,13 +11,13 @@ import me.mingo.GameTest.Window;
 import me.mingo.GameTest.Utils.Location;
 import me.mingo.GameTest.World.Generation.OpenSimplexNoise;
 import me.mingo.GameTest.entities.Entity;
+import me.mingo.GameTest.entities.Player;
 import me.mingo.GameTest.entities.Sun;
 
-public class World {
+public class World implements Serializable {
 	
 	long seed;
 	int size;
-	OpenSimplexNoise noise;
 	
 	int minimumGroundLevel = 55;
 	int pixelCrustLevel = Window.HEIGHT-55;
@@ -30,8 +30,6 @@ public class World {
 	public World(long seed, int size) {
 		this.seed = seed;
 		this.size = size;
-		this.noise = new OpenSimplexNoise(seed);
-		
 	}
 	
 	public void spawnStartingEntities() {
@@ -40,9 +38,11 @@ public class World {
 		//entities.add(new RedLine());
 		//entities.add(new BlueLine());
 		entities.add(new Sun(50, 150, sunMovementSpeed));
+		entities.add(new Player(100, 100, GamePanel.tileSize));
 	}
 	
 	public void generate(double multiplier, double smoothness) {
+		OpenSimplexNoise noise = new OpenSimplexNoise(seed);
 		blocks = new Block[size];
 		
 		// noise.noise(i)
@@ -77,7 +77,10 @@ public class World {
 			int undergroundTilesCount = (int) (Window.HEIGHT-blocks[i].loc.y);
 			//System.out.println(undergroundTilesCount);
 			
-			for (int j = 1; j < 20; j++) {
+			/*for (int j = 1; j < 20; j++) {
+				g2.fillRect(i*GamePanel.tileSize, blocks[i].loc.y+(j*GamePanel.tileSize), GamePanel.tileSize, GamePanel.tileSize);
+			}*/
+			for (int j = 1; j < undergroundTilesCount; j++) {
 				g2.fillRect(i*GamePanel.tileSize, blocks[i].loc.y+(j*GamePanel.tileSize), GamePanel.tileSize, GamePanel.tileSize);
 			}
 		}

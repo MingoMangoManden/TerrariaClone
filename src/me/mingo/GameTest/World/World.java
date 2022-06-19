@@ -12,7 +12,7 @@ import me.mingo.GameTest.Utils.Location;
 import me.mingo.GameTest.World.Generation.OpenSimplexNoise;
 import me.mingo.GameTest.entities.Entity;
 import me.mingo.GameTest.entities.Player;
-import me.mingo.GameTest.entities.Sun;
+import me.mingo.GameTest.environment.Sun;
 
 public class World implements Serializable {
 	
@@ -24,7 +24,7 @@ public class World implements Serializable {
 	int minimumGroundLevel = 55;
 	int pixelCrustLevel = Window.HEIGHT-55;
 	
-	int sunMovementSpeed = 1250;
+	Sun sun = new Sun(50, 150, GamePanel.sunMovementSpeed);
 	
 	public Block[] blocks;
 	public List<Entity> entities;
@@ -39,15 +39,13 @@ public class World implements Serializable {
 		
 		//entities.add(new RedLine());
 		//entities.add(new BlueLine());
-		entities.add(new Player(100, 100, GamePanel.tileSize, GamePanel.playerSpeed));
-		entities.add(new Sun(50, 150, sunMovementSpeed));
+		entities.add(new Player(0, 0, 1, GamePanel.playerSpeed));
 	}
 	
 	public void generate(double multiplier, double smoothness) {
 		OpenSimplexNoise noise = new OpenSimplexNoise(seed);
 		blocks = new Block[size];
 		
-		// noise.noise(i)
 		for (int x = 0; x < size; x++) {
 			//((noise.eval(x, 0)*multiplier)+minimumGroundLevel)
 			double height = (pixelCrustLevel-(noise.eval(x*smoothness, 0)*multiplier)*GamePanel.tileSize)*0.75;
@@ -59,31 +57,31 @@ public class World implements Serializable {
 			
 			//System.out.println((int) height);
 			
-			blocks[x] = new Block(new Location(x, (int) height), Material.DIRT);
+			blocks[x] = new Block(new Location(x, (int) height), Material.GRASS);
 		}
 	}
 	
 	public void draw(Graphics2D g2) {
-		// draw tiles
+		sun.draw(g2);
 		
-		Color grassGreen = new Color(0, 154, 23);
-		
+		// draw tiles/blocks
 		for (int i = 0; i < size; i++) {
-			g2.setColor(grassGreen);
-			g2.fillRect(i*GamePanel.tileSize, blocks[i].loc.y, GamePanel.tileSize, GamePanel.tileSize);
+			Block b = blocks[i];
+			b.loc.x = i*GamePanel.tileSize;
+			b.draw(g2);
 			
-			// under ground tiles
-			Color dirtColor = new Color(139, 69, 19);
-			g2.setColor(dirtColor);
 			
+			// underground tiles
 			int undergroundTilesCount = (int) (Window.HEIGHT-blocks[i].loc.y);
-			//System.out.println(undergroundTilesCount);
 			
 			/*for (int j = 1; j < 20; j++) {
 				g2.fillRect(i*GamePanel.tileSize, blocks[i].loc.y+(j*GamePanel.tileSize), GamePanel.tileSize, GamePanel.tileSize);
 			}*/
 			for (int j = 1; j < undergroundTilesCount; j++) {
+				g2.setColor(Material.DIRT.clr);
 				g2.fillRect(i*GamePanel.tileSize, blocks[i].loc.y+(j*GamePanel.tileSize), GamePanel.tileSize, GamePanel.tileSize);
+				//g2.setColor(Color.RED);
+				//g2.drawRect(i*GamePanel.tileSize, blocks[i].loc.y+(j*GamePanel.tileSize), GamePanel.tileSize, GamePanel.tileSize);
 			}
 		}
 	}

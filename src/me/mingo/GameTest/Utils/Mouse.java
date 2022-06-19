@@ -5,6 +5,9 @@ import java.awt.event.*;
 
 import javax.swing.event.MouseInputListener;
 
+import me.mingo.GameTest.Game;
+import me.mingo.GameTest.GameState;
+
 import java.awt.MouseInfo;
 
 public class Mouse implements MouseInputListener {
@@ -27,7 +30,11 @@ public class Mouse implements MouseInputListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		System.out.println("click");
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			if (Game.gameState.equals(GameState.LaunchMenu)) {
+				Game.gameState = GameState.Playing;
+			}
+		}
 	}
 
 	@Override

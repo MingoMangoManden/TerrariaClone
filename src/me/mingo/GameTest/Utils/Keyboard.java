@@ -3,9 +3,12 @@ package me.mingo.GameTest.Utils;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import me.mingo.GameTest.Game;
+import me.mingo.GameTest.GameState;
+
 public class Keyboard implements KeyListener {
 	
-	public static boolean wPressed, aPressed, sPressed, dPressed;
+	public static boolean wPressed, aPressed, sPressed, dPressed, plusPressed, minusPressed;
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -33,6 +36,14 @@ public class Keyboard implements KeyListener {
 			dPressed = true;
 		}
 		
+		if (code == KeyEvent.VK_PLUS) {
+			plusPressed = true;
+		}
+		
+		if (code == KeyEvent.VK_MINUS) {
+			minusPressed = true;
+		}
+		
 	}
 
 	@Override
@@ -53,6 +64,14 @@ public class Keyboard implements KeyListener {
 		
 		if (code == KeyEvent.VK_D) {
 			dPressed = false;
+		}
+		
+		if (code == KeyEvent.VK_PLUS) {
+			plusPressed = false;
+		}
+		
+		if (code == KeyEvent.VK_MINUS) {
+			minusPressed = false;
 		}
 	}
 	

@@ -23,7 +23,7 @@ public class Utils {
 			out.println(todaysDate);
 			out.println(text);
 			out.close();
-			Game.Quit();
+			Game.quit();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

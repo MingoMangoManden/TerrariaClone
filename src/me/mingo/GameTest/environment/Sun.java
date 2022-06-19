@@ -1,15 +1,13 @@
-package me.mingo.GameTest.entities;
-
-import java.awt.Graphics2D;
-
-import me.mingo.GameTest.GamePanel;
+package me.mingo.GameTest.environment;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
-public class Sun extends Entity {
+import me.mingo.GameTest.entities.Entity;
+
+public class Sun {
 	
-	private static final long serialVersionUID = 1L;
-
 	private int X, Y;
 	
 	// the speed is how much time can pass without the sun moving
@@ -24,14 +22,12 @@ public class Sun extends Entity {
 		this.speed = speed;
 	}
 
-	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(Color.YELLOW);
 		
 		g.fillOval(X, Y, 100, 100);
 	}
 	
-	@Override
 	public void update() {
 		if (updatesSinceLastUpdate == speed) {
 			X += 1;
@@ -43,34 +39,32 @@ public class Sun extends Entity {
 		framesUpdated++;
 	}
 
-	@Override
 	public int getX() {
 		return X;
 	}
 
-	@Override
 	public int getY() {
 		return Y;
 	}
 	
-	@Override
 	public int getSpeed() {
 		return speed;
 	}
 
-	@Override
 	public void setX(int newX) {
 		X = newX;
 	}
 
-	@Override
 	public void setY(int newY) {
 		Y = newY;
 	}
 
-	@Override
 	public void setSpeed(int newSpeed) {
 		speed = newSpeed;
+	}
+	
+	public Rectangle getBounds() {
+		return new Rectangle();
 	}
 
 }

@@ -2,6 +2,8 @@ package me.mingo.GameTest;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -19,9 +21,12 @@ import javax.swing.event.ChangeListener;
 import me.mingo.GameTest.Utils.Keyboard;
 import me.mingo.GameTest.Utils.Mouse;
 import me.mingo.GameTest.Utils.Utils;
+import me.mingo.GameTest.World.Block;
+import me.mingo.GameTest.World.Material;
 import me.mingo.GameTest.World.World;
 import me.mingo.GameTest.entities.Entity;
 import me.mingo.GameTest.entities.Player;
+import me.mingo.GameTest.environment.Sun;
 
 public class GamePanel extends JPanel implements Runnable {
 	
@@ -32,6 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
 	//	CONSTANT VARIABLES	//
 	//						//
 	//////////////////////////
+	
 	public static int tileSize = 16;
 	public static int tilesHorizontal = tileSize * Window.WIDTH;
 	public static int tilesVertical = tileSize * Window.HEIGHT;
@@ -52,7 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// world generation
 	long seed = new Random().nextLong();
-	int worldSize = 1000;
+	int worldSize = Window.WIDTH/tileSize;
 	World world = new World(seed, worldSize);
 	
 	double frequency = 10;
@@ -60,9 +66,14 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// time
 	int TIME = 0;
+	boolean shouldUpdateZoom = true;
+	
+	// sun
+	public static int sunMovementSpeed = 1250;
 	
 	// player
-	public static int playerSpeed = 2;
+	public static double playerSpeed = 1;
+	public static final int renderDistance = 250; // number of blocks rendered
 	
 	//////////////////////////////
 	//							//
@@ -232,8 +243,49 @@ public class GamePanel extends JPanel implements Runnable {
 		for (int i = 0; i < world.entities.size(); i++) {
 			Entity entity = world.entities.get(i);
 			
+			checkCollision(entity);
 			entity.update();
 		}
+		
+		// update zoom
+		if (shouldUpdateZoom) {
+			if (Keyboard.plusPressed) {
+				GamePanel.tileSize += 1;
+			} else if (Keyboard.minusPressed) {
+				GamePanel.tileSize -= 1;
+			}
+			shouldUpdateZoom = false;
+		} else {
+			shouldUpdateZoom = true;
+		}
+	}
+	
+	//////////////////////////
+	//						//
+	//	 Check collisions	//
+	//						//
+	//////////////////////////
+	private void checkCollision(Entity entity) {
+		Block[] nearbySurfaceBlocks = getNearbySurfaceBlocks(entity, 5);
+		
+		for (int j = 0; j < nearbySurfaceBlocks.length; j++) {
+			Block block = nearbySurfaceBlocks[j];
+			block.highlighted = true;
+			
+			if (entity.getBounds().intersects(block.getBounds())) {
+				// block collision
+				System.out.println("block collision");
+				
+			}
+		}
+	}
+	
+	private Block[] getNearbySurfaceBlocks(Entity entity, int accuracy) {
+		// algorithm to find nearby surface blocks with a curtain accuracy (how many blocks will be checked)
+		
+		
+		Block[] nearbySurfaceBlocks = new Block[] {};
+		return world.blocks;
 	}
 	
 	//////////////////////////////////////////////////////////
@@ -246,14 +298,53 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		Graphics2D g2 = (Graphics2D) g;
 		
-		world.draw(g2);
-		
-		// draw entities
-		for (int i = 0; i < world.entities.size(); i++) {
-			Entity entity = world.entities.get(i);
-			
-			entity.draw(g2);
+		switch(Game.gameState) {
+			case LaunchMenu:
+				g2.setColor(Material.GRASS.clr);
+				
+				//
+				Font font = new Font("Comic Sans MS", 0, 64);
+				FontMetrics fm = Game.window.getFontMetrics(font);
+				
+				g2.setFont(font);
+				
+				String title = "Block World";
+				g2.drawString(title,
+						(Window.WIDTH/2) - (fm.stringWidth(title)/2),
+						(int) (Window.HEIGHT*0.2)
+				);
+				
+				//
+				String pressToPlay = "PLAY";
+				g2.setColor(Color.YELLOW);
+				font = new Font("Comic Sans MS", 0, 32);
+				g2.setFont(font);
+				
+				fm = Game.window.getFontMetrics(font);
+				g2.drawString(pressToPlay,
+						(Window.WIDTH/2) - (fm.stringWidth(pressToPlay)/2),
+						(int) (Window.HEIGHT*0.4)
+				);
+				break;
+			case Playing:
+				world.draw(g2);
+				
+				// draw entities
+				for (int i = 0; i < world.entities.size(); i++) {
+					Entity entity = world.entities.get(i);
+					
+					entity.draw(g2);
+				}
+				break;
+			case Dead:
+				break;
+			case Credits:
+				break;
+			default:
+				break;
 		}
+		
+		g2.dispose(); // release any system resources it's using or something idk
 		
 		// draw giant string
 		//g2.setFont(new Font("Comic Sans MS", 0, 64));

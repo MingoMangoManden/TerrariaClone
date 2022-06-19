@@ -1,11 +1,11 @@
 package me.mingo.GameTest;
 
-import me.mingo.GameTest.Utils.Keyboard;
 import me.mingo.GameTest.Utils.Utils;
 
 public class Game {
 	
-	Window window;
+	public static Window window;
+	public static GameState gameState;
 	
 	public Game() {
 		init();
@@ -18,11 +18,12 @@ public class Game {
 		//Utils.outputError("TEST ERROR");
 		
 		// Create Window
-		Window window = new Window();
+		gameState = GameState.LaunchMenu;
+		window = new Window();
 		window.setLocationRelativeTo(null);
 	}
 	
-	public static void Quit() {
+	public static void quit() {
 		// Make sure to save before quitting
 		System.exit(0);
 	}

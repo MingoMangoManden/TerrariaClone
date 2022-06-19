@@ -1,4 +1,4 @@
-package me.mingo.GameTest.Utils;
+package me.mingo.GameTest.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 
 import me.mingo.GameTest.Game;
-import me.mingo.GameTest.World.World;
+import me.mingo.GameTest.world.World;
 
 public class Utils {
 	

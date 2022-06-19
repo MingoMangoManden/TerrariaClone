@@ -1,4 +1,4 @@
-package me.mingo.GameTest.Main;
+package me.mingo.GameTest.main;
 
 import me.mingo.GameTest.Game;
 

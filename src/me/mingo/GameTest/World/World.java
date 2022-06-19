@@ -1,4 +1,4 @@
-package me.mingo.GameTest.World;
+package me.mingo.GameTest.world;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -8,8 +8,8 @@ import java.util.List;
 
 import me.mingo.GameTest.GamePanel;
 import me.mingo.GameTest.Window;
-import me.mingo.GameTest.Utils.Location;
-import me.mingo.GameTest.World.Generation.OpenSimplexNoise;
+import me.mingo.GameTest.utils.Location;
+import me.mingo.GameTest.world.Generation.OpenSimplexNoise;
 import me.mingo.GameTest.entities.Entity;
 import me.mingo.GameTest.entities.Player;
 import me.mingo.GameTest.environment.Sun;

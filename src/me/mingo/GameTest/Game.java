@@ -1,6 +1,6 @@
 package me.mingo.GameTest;
 
-import me.mingo.GameTest.Utils.Utils;
+import me.mingo.GameTest.utils.Utils;
 
 public class Game {
 	

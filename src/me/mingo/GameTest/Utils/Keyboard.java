@@ -1,4 +1,4 @@
-package me.mingo.GameTest.Utils;
+package me.mingo.GameTest.utils;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

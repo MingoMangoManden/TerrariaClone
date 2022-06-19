@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import me.mingo.GameTest.GamePanel;
-import me.mingo.GameTest.Utils.Keyboard;
+import me.mingo.GameTest.utils.Keyboard;
 
 public class Player extends Entity {
 	

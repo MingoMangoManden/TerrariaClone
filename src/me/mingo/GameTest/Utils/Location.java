@@ -1,4 +1,4 @@
-package me.mingo.GameTest.Utils;
+package me.mingo.GameTest.utils;
 
 import java.io.Serializable;
 

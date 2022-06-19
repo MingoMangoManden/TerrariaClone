@@ -1,4 +1,4 @@
-package me.mingo.GameTest.World;
+package me.mingo.GameTest.world;
 
 import java.awt.Color;
 

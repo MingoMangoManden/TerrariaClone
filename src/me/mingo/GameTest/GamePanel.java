@@ -18,15 +18,13 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import me.mingo.GameTest.Utils.Keyboard;
-import me.mingo.GameTest.Utils.Mouse;
-import me.mingo.GameTest.Utils.Utils;
-import me.mingo.GameTest.World.Block;
-import me.mingo.GameTest.World.Material;
-import me.mingo.GameTest.World.World;
+import me.mingo.GameTest.utils.Keyboard;
+import me.mingo.GameTest.utils.Mouse;
+import me.mingo.GameTest.utils.Utils;
+import me.mingo.GameTest.world.Block;
+import me.mingo.GameTest.world.Material;
+import me.mingo.GameTest.world.World;
 import me.mingo.GameTest.entities.Entity;
-import me.mingo.GameTest.entities.Player;
-import me.mingo.GameTest.environment.Sun;
 
 public class GamePanel extends JPanel implements Runnable {
 	

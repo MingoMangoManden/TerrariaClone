@@ -8,8 +8,9 @@ import java.util.List;
 
 import me.mingo.GameTest.GamePanel;
 import me.mingo.GameTest.Window;
+import me.mingo.GameTest.utils.Colors;
 import me.mingo.GameTest.utils.Location;
-import me.mingo.GameTest.world.Generation.OpenSimplexNoise;
+import me.mingo.GameTest.world.generation.OpenSimplexNoise;
 import me.mingo.GameTest.entities.Entity;
 import me.mingo.GameTest.entities.Player;
 import me.mingo.GameTest.environment.Sun;
@@ -57,7 +58,7 @@ public class World implements Serializable {
 			
 			//System.out.println((int) height);
 			
-			blocks[x] = new Block(new Location(x, (int) height), Material.GRASS);
+			blocks[x] = new Block(new Location(x, (int) height), Colors.GRASS);
 		}
 	}
 	
@@ -78,7 +79,7 @@ public class World implements Serializable {
 				g2.fillRect(i*GamePanel.tileSize, blocks[i].loc.y+(j*GamePanel.tileSize), GamePanel.tileSize, GamePanel.tileSize);
 			}*/
 			for (int j = 1; j < undergroundTilesCount; j++) {
-				g2.setColor(Material.DIRT.clr);
+				g2.setColor(Colors.DIRT.clr);
 				g2.fillRect(i*GamePanel.tileSize, blocks[i].loc.y+(j*GamePanel.tileSize), GamePanel.tileSize, GamePanel.tileSize);
 				//g2.setColor(Color.RED);
 				//g2.drawRect(i*GamePanel.tileSize, blocks[i].loc.y+(j*GamePanel.tileSize), GamePanel.tileSize, GamePanel.tileSize);

@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
+import me.mingo.GameTest.Game;
 import me.mingo.GameTest.GamePanel;
+import me.mingo.GameTest.GameState;
 import me.mingo.GameTest.utils.Keyboard;
 
 public class Player extends Entity {
@@ -13,7 +15,8 @@ public class Player extends Entity {
 	
 	public int x, y;
 	public int width, height; // block size
-	public  double speed;
+	public double speed;
+	public boolean dead = false;
 	
 	public double[] velocity;
 	public double goofiness = 0.8;
@@ -32,23 +35,25 @@ public class Player extends Entity {
 
 	@Override
 	public void draw(Graphics2D g2) {
-		g2.setColor(Color.BLUE);
-		
-		g2.fillRect(x, y, width*GamePanel.tileSize, height*GamePanel.tileSize);
-		hitbox = new Rectangle(x, y, width*GamePanel.tileSize, height*GamePanel.tileSize);
-		
-		// draw bounds
-		g2.setColor(Color.RED);
-		g2.draw(getBounds());
+		if (!dead) {
+			g2.setColor(Color.BLUE);
+			
+			g2.fillRect(x, y, width*GamePanel.tileSize, height*GamePanel.tileSize);
+			hitbox = new Rectangle((int) (x+velocity[0]), (int) (y+velocity[1]), width*GamePanel.tileSize, height*GamePanel.tileSize);
+			
+			// draw bounds
+			g2.setColor(Color.RED);
+			g2.draw(getBounds());
+		}
 	}
 
 	@Override
 	public void update() {
 		if (Keyboard.wPressed) {
-			velocity[1] += speed*-1;
+			velocity[1] -= speed;
 		}
 		if (Keyboard.aPressed) {
-			velocity[0] += speed*-1;
+			velocity[0] -= speed;
 		}
 		if (Keyboard.sPressed) {
 			velocity[1] += speed;
@@ -115,7 +120,7 @@ public class Player extends Entity {
 	}
 	
 	public Rectangle getBounds() {
-		return hitbox;
+		return dead ? new Rectangle() : hitbox;
 	}
 
 	@Override
@@ -126,6 +131,16 @@ public class Player extends Entity {
 	@Override
 	public double[] getVelocity() {
 		return velocity;
+	}
+
+	@Override
+	public void die() {
+		dead = true;
+		velocity[0] = 0.0;
+		velocity[1] = 0.0;
+		
+		//
+		Game.setState(GameState.Credits);
 	}
 
 }

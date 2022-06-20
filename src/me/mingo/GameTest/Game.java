@@ -7,6 +7,8 @@ public class Game {
 	public static Window window;
 	public static GameState gameState;
 	
+	public final static String dev = "VicDev";
+	
 	public Game() {
 		init();
 	}
@@ -18,9 +20,16 @@ public class Game {
 		//Utils.outputError("TEST ERROR");
 		
 		// Create Window
-		gameState = GameState.LaunchMenu;
 		window = new Window();
 		window.setLocationRelativeTo(null);
+		
+		// set starting game state
+		setState(GameState.Credits);
+	}
+	
+	public static void setState(GameState gameState) {
+		Game.gameState = gameState;
+		Window.gamePanel.setBackground(gameState.clr);
 	}
 	
 	public static void quit() {

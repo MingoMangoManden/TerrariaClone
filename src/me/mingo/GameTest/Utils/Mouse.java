@@ -32,7 +32,7 @@ public class Mouse implements MouseInputListener {
 	public void mousePressed(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			if (Game.gameState.equals(GameState.LaunchMenu)) {
-				Game.gameState = GameState.Playing;
+				Game.setState(GameState.Playing);
 			}
 		}
 	}

@@ -18,13 +18,15 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import me.mingo.GameTest.credits.Credits;
+import me.mingo.GameTest.entities.Entity;
+import me.mingo.GameTest.utils.Colors;
+import me.mingo.GameTest.utils.Fonts;
 import me.mingo.GameTest.utils.Keyboard;
 import me.mingo.GameTest.utils.Mouse;
 import me.mingo.GameTest.utils.Utils;
 import me.mingo.GameTest.world.Block;
-import me.mingo.GameTest.world.Material;
 import me.mingo.GameTest.world.World;
-import me.mingo.GameTest.entities.Entity;
 
 public class GamePanel extends JPanel implements Runnable {
 	
@@ -84,9 +86,6 @@ public class GamePanel extends JPanel implements Runnable {
 		addMouseListener(new Mouse());
 		addKeyListener(new Keyboard());
 		setFocusable(true);
-		
-		Color skyBlue = new Color(0, 181, 226);
-		setBackground(skyBlue); // paint da sky
 		
 		loadWorld();
 		
@@ -274,6 +273,8 @@ public class GamePanel extends JPanel implements Runnable {
 				// block collision
 				System.out.println("block collision");
 				
+				entity.die();
+				
 			}
 		}
 	}
@@ -298,10 +299,10 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		switch(Game.gameState) {
 			case LaunchMenu:
-				g2.setColor(Material.GRASS.clr);
+				g2.setColor(Colors.GRASS.clr);
 				
 				//
-				Font font = new Font("Comic Sans MS", 0, 64);
+				Font font = new Font(Fonts.standard.name(), 0, 64);
 				FontMetrics fm = Game.window.getFontMetrics(font);
 				
 				g2.setFont(font);
@@ -315,7 +316,7 @@ public class GamePanel extends JPanel implements Runnable {
 				//
 				String pressToPlay = "PLAY";
 				g2.setColor(Color.YELLOW);
-				font = new Font("Comic Sans MS", 0, 32);
+				font = new Font(Fonts.standard.name(), 0, 32);
 				g2.setFont(font);
 				
 				fm = Game.window.getFontMetrics(font);
@@ -335,8 +336,44 @@ public class GamePanel extends JPanel implements Runnable {
 				}
 				break;
 			case Dead:
+				// playing but with 'you died' text
 				break;
 			case Credits:
+				
+				g2.setColor(Color.WHITE);
+				
+				// title
+				font = new Font(Fonts.standard.name(), Font.ITALIC, 100);
+				fm = Game.window.getFontMetrics(font);
+				
+				g2.setFont(font);
+				
+				title = "Block World";
+				g2.drawString(title,
+						(Window.WIDTH/2) - (fm.stringWidth(title)/2),
+						(int) (Window.HEIGHT*0.2)
+				);
+				
+				// credits
+				Credits[] credits = Credits.values();
+				
+				font = new Font(Fonts.standard.name(), Font.ITALIC, 20);
+				fm = Game.window.getFontMetrics(font);
+				
+				g2.setFont(font);
+				
+				for (int i = 0; i < credits.length; i++) {
+					Credits credit = credits[i];
+					String text = credit.title + " | " + credit.person;
+					int space = 75;
+					
+					fm = Game.window.getFontMetrics(font);
+					g2.drawString(text,
+							(Window.WIDTH/2) - (fm.stringWidth(text)/2),
+							(int) (Window.HEIGHT*0.8-(i*space))
+					);
+				}
+				
 				break;
 			default:
 				break;

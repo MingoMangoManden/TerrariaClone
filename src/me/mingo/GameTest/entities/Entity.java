@@ -11,6 +11,7 @@ public abstract class Entity implements Serializable {
 	
 	public abstract void draw(Graphics2D g2);
 	public abstract void update();
+	public abstract void die();
 	
 	public abstract double getSpeed();
 	public abstract double[] getVelocity();

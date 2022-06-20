@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.io.Serializable;
 
 import me.mingo.GameTest.GamePanel;
+import me.mingo.GameTest.utils.Colors;
 import me.mingo.GameTest.utils.Location;
 
 public class Block implements Serializable {
@@ -13,11 +14,11 @@ public class Block implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public Location loc;
-	public Material mat;
+	public Colors mat;
 	
 	public boolean highlighted = false;
 	
-	public Block(Location loc, Material mat) {
+	public Block(Location loc, Colors mat) {
 		this.loc = loc;
 		this.mat = mat;
 	}

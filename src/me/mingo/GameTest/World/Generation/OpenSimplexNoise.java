@@ -1,4 +1,4 @@
-package me.mingo.GameTest.world.Generation;
+package me.mingo.GameTest.world.generation;
 
 /*
  * 2014 OpenSimplex Noise in Java.

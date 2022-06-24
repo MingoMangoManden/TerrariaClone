@@ -1,16 +1,16 @@
 package me.mingo.GameTest.world;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.mingo.GameTest.Colors;
 import me.mingo.GameTest.GamePanel;
+import me.mingo.GameTest.Location;
 import me.mingo.GameTest.Window;
-import me.mingo.GameTest.utils.Colors;
-import me.mingo.GameTest.utils.Location;
 import me.mingo.GameTest.world.generation.OpenSimplexNoise;
+import me.mingo.GameTest.entities.Bee;
 import me.mingo.GameTest.entities.Entity;
 import me.mingo.GameTest.entities.Player;
 import me.mingo.GameTest.environment.Sun;
@@ -41,6 +41,7 @@ public class World implements Serializable {
 		//entities.add(new RedLine());
 		//entities.add(new BlueLine());
 		entities.add(new Player(0, 0, 1, GamePanel.playerSpeed));
+		entities.add(new Bee(1000, 300, 1, 0.5));
 	}
 	
 	public void generate(double multiplier, double smoothness) {

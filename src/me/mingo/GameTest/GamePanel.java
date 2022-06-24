@@ -8,20 +8,21 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import me.mingo.GameTest.credits.Credits;
 import me.mingo.GameTest.entities.Entity;
-import me.mingo.GameTest.utils.Colors;
-import me.mingo.GameTest.utils.Fonts;
 import me.mingo.GameTest.utils.Keyboard;
 import me.mingo.GameTest.utils.Mouse;
 import me.mingo.GameTest.utils.Utils;
@@ -54,7 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
 	//						//
 	//////////////////////////
 	
-	boolean testMode = false;
+	public static final boolean testMode = false;
 	
 	// world generation
 	long seed = new Random().nextLong();
@@ -267,13 +268,15 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		for (int j = 0; j < nearbySurfaceBlocks.length; j++) {
 			Block block = nearbySurfaceBlocks[j];
-			block.highlighted = true;
 			
 			if (entity.getBounds().intersects(block.getBounds())) {
 				// block collision
 				System.out.println("block collision");
 				
-				entity.die();
+				//entity.die();
+				
+				// make entity unable to pass through the wall
+				
 				
 			}
 		}
@@ -295,7 +298,9 @@ public class GamePanel extends JPanel implements Runnable {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		Graphics2D g2 = (Graphics2D) g;
+		BufferedImage screen = new BufferedImage(Window.WIDTH, Window.HEIGHT, BufferedImage.TYPE_INT_ARGB);
+	    Graphics2D g2 = (Graphics2D) screen.getGraphics();
+		//Graphics2D g2 = (Graphics2D) g;
 		
 		switch(Game.gameState) {
 			case LaunchMenu:
@@ -349,10 +354,10 @@ public class GamePanel extends JPanel implements Runnable {
 				g2.setFont(font);
 				
 				title = "Block World";
-				g2.drawString(title,
-						(Window.WIDTH/2) - (fm.stringWidth(title)/2),
-						(int) (Window.HEIGHT*0.2)
-				);
+				int x = (Window.WIDTH/2) - (fm.stringWidth(title)/2);
+				int y = (int) (Window.HEIGHT*0.2);
+				
+				g2.drawString(title, x, y);
 				
 				// credits
 				Credits[] credits = Credits.values();
@@ -364,14 +369,20 @@ public class GamePanel extends JPanel implements Runnable {
 				
 				for (int i = 0; i < credits.length; i++) {
 					Credits credit = credits[i];
-					String text = credit.title + " | " + credit.person;
+					String text = credit.title;
 					int space = 75;
 					
-					fm = Game.window.getFontMetrics(font);
-					g2.drawString(text,
-							(Window.WIDTH/2) - (fm.stringWidth(text)/2),
-							(int) (Window.HEIGHT*0.8-(i*space))
-					);
+					int creditTitleX = (Window.WIDTH/2) - (fm.stringWidth(text)/2);
+					int creditTitleY = (int) (Window.HEIGHT*0.8-(i*space));
+					
+					g2.drawString(text, creditTitleX, creditTitleY);
+					
+					text = credit.person;
+					
+					int creditPersonX = (Window.WIDTH/2) - (fm.stringWidth(text)/2);
+					int creditPersonY = (int) (Window.HEIGHT*0.8-(i*space))+25;
+					
+					g2.drawString(text, creditPersonX, creditPersonY);
 				}
 				
 				break;
@@ -379,6 +390,13 @@ public class GamePanel extends JPanel implements Runnable {
 				break;
 		}
 		
+		// screenshot if hotkey pressed
+		
+		
+		// draw the entire screen
+		g.drawImage(screen, 0, 0, this);
+		
+		g.dispose();
 		g2.dispose(); // release any system resources it's using or something idk
 		
 		// draw giant string

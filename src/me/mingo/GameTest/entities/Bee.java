@@ -3,69 +3,62 @@ package me.mingo.GameTest.entities;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.Random;
 
-import me.mingo.GameTest.Game;
 import me.mingo.GameTest.GamePanel;
-import me.mingo.GameTest.GameState;
 import me.mingo.GameTest.Vector;
-import me.mingo.GameTest.utils.Keyboard;
 
-public class Player extends Entity {
+public class Bee extends Entity {
 	
-	private static final long serialVersionUID = 1L;
+	int x, y;
+	int width, height;
+	double speed;
+	boolean dead = false;
 	
-	public int x, y;
-	public int width, height; // block size
-	public double speed;
-	public boolean dead = false;
+	Vector velocity = new Vector(0, 0);
+	double rotation = 0.0;
+	double goofiness = 0.8;
 	
-	public Vector velocity = new Vector(0, 0);
-	public double rotation = 0.0;
-	public double goofiness = 0.8;
+	String heading = "";
 	
-	public Rectangle hitbox;
+	Rectangle hitbox;
 	
-	public Player(int startingX, int startingY, int size, double speed) {
-		this.x = startingX;
-		this.y = startingY;
+	public Bee(int x, int y, int size, double speed) {
+		this.x = x;
+		this.y = y;
 		this.width = size;
-		this.height = size*2;
+		this.height = size;
 		this.speed = speed;
 		this.hitbox = new Rectangle(x, y, width*GamePanel.tileSize, height*GamePanel.tileSize);
+		chooseFlyingDirection();
+	}
+	
+	private void chooseFlyingDirection() {
+		int num = new Random().nextInt(2);
+		this.heading = (num == 0) ? "West" : "East";
 	}
 
 	@Override
 	public void draw(Graphics2D g2) {
 		if (!dead) {
-			g2.setColor(Color.BLUE);
+			g2.setColor(Color.YELLOW);
 			
-			//g2.rotate(Math.toRadians(rotation));
 			g2.fillRect(x, y, width*GamePanel.tileSize, height*GamePanel.tileSize);
 			hitbox = new Rectangle((int) (x+velocity.x), (int) (y+velocity.y), width*GamePanel.tileSize, height*GamePanel.tileSize);
-			
-			if (GamePanel.testMode) {
-				// draw bounds
-				g2.setColor(Color.RED);
-				g2.draw(getBounds());
-			}
 		}
 	}
 
 	@Override
 	public void update() {
 		if (!dead) {
-			if (Keyboard.wPressed) {
-				velocity.y -= speed;
-			}
-			if (Keyboard.aPressed) {
+			
+			/*if (heading.equals("West")) {
 				velocity.x -= speed;
-			}
-			if (Keyboard.sPressed) {
-				velocity.y += speed;
-			}
-			if (Keyboard.dPressed) {
+				velocity.y -= Math.sin(x);
+			} else if (heading.equals("East")) {
 				velocity.x += speed;
-			}
+				//velocity[1] += Math.sin(x);
+			}*/
 			normalizeVelocity();
 		}
 	}
@@ -113,23 +106,11 @@ public class Player extends Entity {
 			velocity.y *= goofiness;
 		}
 	}
-	
-	void jump() {
-		/*
-		 * Newton's law of universal gravitation
-		 * F  = G*(m1*m2/r^2)
-		 */
-	}
-	
-	public int[] getMiddle() {
-		return new int[] {
-				(int) (width*0.5),
-				(int) (height*0.5)
-		};
-	}
-	
-	public Rectangle getBounds() {
-		return dead ? new Rectangle() : hitbox;
+
+	@Override
+	public void die() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -141,20 +122,23 @@ public class Player extends Entity {
 	public Vector getVelocity() {
 		return velocity;
 	}
-	
+
 	@Override
 	public double getRotation() {
 		return rotation;
 	}
 
 	@Override
-	public void die() {
-		dead = true;
-		velocity.x = 0.0;
-		velocity.y = 0.0;
-		
-		//
-		Game.setState(GameState.Credits);
+	public int[] getMiddle() {
+		return new int[] {
+				(int) (width*0.5),
+				(int) (height*0.5)
+		};
+	}
+
+	@Override
+	public Rectangle getBounds() {
+		return dead ? new Rectangle() : hitbox;
 	}
 
 }

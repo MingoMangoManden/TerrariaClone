@@ -1,12 +1,12 @@
-package me.mingo.GameTest.credits;
+package me.mingo.GameTest;
 
 public enum Credits {
 	
-	PRODUCER("VicDev", "Producer"),
-	DEV("VicDev", "Game Developer"),
-	PROGRAMMER("VicDev", "Game Programmer"),
+	ART("Unknown", "Art Producer"),
 	MUSIC_PRODUCER("Unknown", "Music Producer"),
-	ART("Unknown", "Art Producer");
+	PROGRAMMER("VicDev", "Game Programmer"),
+	DEV("VicDev", "Game Developer"),
+	PRODUCER("VicDev", "Producer");
 	
 	public String person;
 	public String title;

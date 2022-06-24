@@ -1,6 +1,4 @@
-package me.mingo.GameTest.main;
-
-import me.mingo.GameTest.Game;
+package me.mingo.GameTest;
 
 public class Main {
 

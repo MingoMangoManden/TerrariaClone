@@ -5,9 +5,9 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
+import me.mingo.GameTest.Colors;
 import me.mingo.GameTest.GamePanel;
-import me.mingo.GameTest.utils.Colors;
-import me.mingo.GameTest.utils.Location;
+import me.mingo.GameTest.Location;
 
 public class Block implements Serializable {
 	

@@ -8,7 +8,7 @@ import me.mingo.GameTest.GameState;
 
 public class Keyboard implements KeyListener {
 	
-	public static boolean wPressed, aPressed, sPressed, dPressed, plusPressed, minusPressed;
+	public static boolean wPressed, aPressed, sPressed, dPressed, plusPressed, minusPressed, screenshotPressed;
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -44,6 +44,10 @@ public class Keyboard implements KeyListener {
 			minusPressed = true;
 		}
 		
+		if (code == KeyEvent.VK_F5) {
+			screenshotPressed = true;
+		}
+		
 	}
 
 	@Override
@@ -72,6 +76,10 @@ public class Keyboard implements KeyListener {
 		
 		if (code == KeyEvent.VK_MINUS) {
 			minusPressed = false;
+		}
+		
+		if (code == KeyEvent.VK_F5) {
+			screenshotPressed = true;
 		}
 	}
 	

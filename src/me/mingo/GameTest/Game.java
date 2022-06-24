@@ -24,7 +24,7 @@ public class Game {
 		window.setLocationRelativeTo(null);
 		
 		// set starting game state
-		setState(GameState.Credits);
+		setState(GameState.LaunchMenu);
 	}
 	
 	public static void setState(GameState gameState) {

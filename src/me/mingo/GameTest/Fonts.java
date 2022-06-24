@@ -1,4 +1,4 @@
-package me.mingo.GameTest.utils;
+package me.mingo.GameTest;
 
 public enum Fonts {
 	

@@ -1,6 +1,8 @@
 package me.mingo.GameTest.utils;
 
+import java.awt.Color;
 import java.awt.Point;
+import java.awt.Graphics2D;
 import java.awt.event.*;
 
 import javax.swing.event.MouseInputListener;
@@ -18,8 +20,15 @@ public class Mouse implements MouseInputListener {
 		Point p = MouseInfo.getPointerInfo().getLocation();
 		
 		// cancelling out idk why
-		MOUSE_X = p.x-250;
-		MOUSE_Y = p.y-150;
+		MOUSE_X = p.x-160; //-250
+		MOUSE_Y = p.y-150; //-150
+	}
+	
+	public static void draw(Graphics2D g2) {
+		updateMousePosition();
+		
+		g2.setColor(Color.YELLOW);
+		g2.fillRect(Mouse.MOUSE_X, Mouse.MOUSE_Y, 1, 1);
 	}
 
 	@Override

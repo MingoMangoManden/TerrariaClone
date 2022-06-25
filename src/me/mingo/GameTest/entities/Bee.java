@@ -7,6 +7,7 @@ import java.util.Random;
 
 import me.mingo.GameTest.GamePanel;
 import me.mingo.GameTest.Vector;
+import me.mingo.GameTest.utils.Mouse;
 
 public class Bee extends Entity {
 	
@@ -22,6 +23,8 @@ public class Bee extends Entity {
 	String heading = "";
 	
 	Rectangle hitbox;
+	
+	boolean mouseHovering = false;
 	
 	public Bee(int x, int y, int size, double speed) {
 		this.x = x;
@@ -44,21 +47,33 @@ public class Bee extends Entity {
 			g2.setColor(Color.YELLOW);
 			
 			g2.fillRect(x, y, width*GamePanel.tileSize, height*GamePanel.tileSize);
-			hitbox = new Rectangle((int) (x+velocity.x), (int) (y+velocity.y), width*GamePanel.tileSize, height*GamePanel.tileSize);
+			
+			// mouse hovering
+			if (mouseHovering) {
+				g2.setColor(Color.WHITE);
+				drawName(g2);
+			}
+			
+			// hitbox
+			//hitbox = new Rectangle((int) (x+velocity.x), (int) (y+velocity.y), width*GamePanel.tileSize, height*GamePanel.tileSize);
+			//g2.setColor(Color.RED);
+			//g2.draw(hitbox);
 		}
+	}
+	
+	private void drawName(Graphics2D g2) {
+		int nameX = x - (int) ((width*16)*0.25);
+		int nameY = y + (int) ((height*0.5)*-16);
+		g2.drawString(this.getClass().getSimpleName(), nameX, nameY);
 	}
 
 	@Override
 	public void update() {
 		if (!dead) {
+			mouseHovering = hitbox.contains(Mouse.MOUSE_X, Mouse.MOUSE_Y);
 			
-			/*if (heading.equals("West")) {
-				velocity.x -= speed;
-				velocity.y -= Math.sin(x);
-			} else if (heading.equals("East")) {
-				velocity.x += speed;
-				//velocity[1] += Math.sin(x);
-			}*/
+			// movement code
+			
 			normalizeVelocity();
 		}
 	}

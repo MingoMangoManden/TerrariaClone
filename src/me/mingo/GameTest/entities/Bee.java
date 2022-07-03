@@ -21,6 +21,7 @@ public class Bee extends Entity {
 	double goofiness = 0.8;
 	
 	String heading = "";
+	String name = this.getClass().getSimpleName();
 	
 	Rectangle hitbox;
 	
@@ -64,11 +65,11 @@ public class Bee extends Entity {
 	private void drawName(Graphics2D g2) {
 		int nameX = x - (int) ((width*16)*0.25);
 		int nameY = y + (int) ((height*0.5)*-16);
-		g2.drawString(this.getClass().getSimpleName(), nameX, nameY);
+		g2.drawString(name, nameX, nameY);
 	}
 
 	@Override
-	public void update() {
+	public void update(double deltaTime) {
 		if (!dead) {
 			mouseHovering = hitbox.contains(Mouse.MOUSE_X, Mouse.MOUSE_Y);
 			

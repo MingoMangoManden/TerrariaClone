@@ -1,6 +1,7 @@
 package me.mingo.GameTest.world;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,7 @@ public class World implements Serializable {
 		
 		//entities.add(new RedLine());
 		//entities.add(new BlueLine());
-		entities.add(new Player(0, 0, 1, GamePanel.playerSpeed));
+		entities.add(GamePanel.player);
 		entities.add(new Bee(1000, 300, 1, 0.5));
 	}
 	
@@ -59,7 +60,7 @@ public class World implements Serializable {
 			
 			//System.out.println((int) height);
 			
-			blocks[x] = new Block(new Location(x, (int) height), Colors.GRASS);
+			blocks[x] = new Block(new Location(x, (int) height), true, Colors.GRASS);
 		}
 	}
 	
@@ -86,6 +87,21 @@ public class World implements Serializable {
 				//g2.drawRect(i*GamePanel.tileSize, blocks[i].loc.y+(j*GamePanel.tileSize), GamePanel.tileSize, GamePanel.tileSize);
 			}
 		}
+	}
+	
+	public Block getBlockAt(int x, int y) {
+		
+		Block b = null;
+		Rectangle rect = new Rectangle(x, y, 1, 1);
+		
+		for (int i = 0; i < blocks.length; i++) {
+			if (blocks[i].getBounds().intersects(rect)) {
+				b = blocks[i];
+				return b;
+			}
+		}
+		
+		return null;
 	}
 
 }

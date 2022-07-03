@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import me.mingo.GameTest.Game;
 import me.mingo.GameTest.GamePanel;
 import me.mingo.GameTest.GameState;
+import me.mingo.GameTest.Location;
 import me.mingo.GameTest.Vector;
 import me.mingo.GameTest.utils.Keyboard;
 
@@ -16,12 +17,14 @@ public class Player extends Entity {
 	
 	public int x, y;
 	public int width, height; // block size
-	public double speed;
+	public double speed; // acceleration
 	public boolean dead = false;
 	
 	public Vector velocity = new Vector(0, 0);
 	public double rotation = 0.0;
+	
 	public double goofiness = 0.8;
+	public double gravityScale = 0.8; // 'weight', 'gravitational pull'
 	
 	public Rectangle hitbox;
 	
@@ -44,36 +47,56 @@ public class Player extends Entity {
 			hitbox = new Rectangle((int) (x+velocity.x), (int) (y+velocity.y), width*GamePanel.tileSize, height*GamePanel.tileSize);
 			
 			if (GamePanel.testMode) {
-				// draw bounds
+				// draw hitbox
 				g2.setColor(Color.RED);
 				g2.draw(getBounds());
+				
+				// draw somethg
+				g2.setColor(Color.GREEN);
+				g2.draw(new Rectangle(x, (int) (y+(height*16)+velocity.y), 1, 1));
 			}
-		}
-	}
-
-	@Override
-	public void update() {
-		if (!dead) {
-			if (Keyboard.wPressed) {
-				velocity.y -= speed;
-			}
-			if (Keyboard.aPressed) {
-				velocity.x -= speed;
-			}
-			if (Keyboard.sPressed) {
-				velocity.y += speed;
-			}
-			if (Keyboard.dPressed) {
-				velocity.x += speed;
-			}
-			normalizeVelocity();
 		}
 	}
 	
-	private void normalizeVelocity() {
-		x += velocity.x;
-		y += velocity.y;
+	@Override
+	public void update(double deltaTime) {
+		if (!dead) {
+			updateVelocity(deltaTime);
+			applyVelocity(deltaTime);
+			normalizeVelocity(deltaTime);
+		}
+	}
+	
+	private void updateVelocity(double deltaTime) {
 		
+		Location headed = new Location(x, (int) (y+(height*16)+velocity.y));
+		
+		// gravity
+		/*if (!isSolidBlock(headed)) {
+			velocity.y += gravityScale;
+		}*/
+		
+		// keyboard presses
+		if (Keyboard.wPressed) {
+			velocity.y -= speed * deltaTime;
+		}
+		if (Keyboard.aPressed) {
+			velocity.x -= speed * deltaTime;
+		}
+		if (Keyboard.sPressed) {
+			velocity.y += speed * deltaTime;
+		}
+		if (Keyboard.dPressed) {
+			velocity.x += speed * deltaTime;
+		}
+	}
+	
+	private void applyVelocity(double deltaTime) {
+		x += velocity.x * deltaTime;
+		y += velocity.y * deltaTime;
+	}
+	
+	private void normalizeVelocity(double deltaTime) {
 		
 		// X VELOCITY //
 		///////////////////////////////////////////////////////////////////
@@ -106,19 +129,57 @@ public class Player extends Entity {
 		
 		///////////////////////////////////////////////////////////////////
 		
+		int someConstant = 2;
+		
 		if (velocity.x != 0) {
-			velocity.x *= goofiness;
+			velocity.x *= goofiness * deltaTime*someConstant;
 		}
 		if (velocity.y != 0) {
-			velocity.y *= goofiness;
+			velocity.y *= goofiness * deltaTime*someConstant;
 		}
 	}
 	
-	void jump() {
-		/*
-		 * Newton's law of universal gravitation
-		 * F  = G*(m1*m2/r^2)
-		 */
+	private boolean isSolidBlock(Location headed) {
+		/*if (x < 0 || x >= Window.WIDTH-width) {
+			System.out.println("hahah colisision");
+			return true;
+		}
+		if (y < 0 || y >= Window.HEIGHT) {
+			return true;
+		}*/
+		
+		// all the corners of the hitbox
+		boolean topLeft = GamePanel.world.getBlockAt(x, y) != null;
+		boolean topRight = GamePanel.world.getBlockAt(x+width, y) != null;
+		boolean bottomLeft = GamePanel.world.getBlockAt(x, y) != null;
+		boolean bottomRight = GamePanel.world.getBlockAt(x+width, y) != null;
+		
+		/*System.out.println("topLeft " + topLeft);
+		System.out.println("topRight " + topRight);
+		System.out.println("bottomLeft " + bottomLeft);
+		System.out.println("bottomRight " + bottomRight);
+		
+		if (!topLeft)
+			if (!topRight)
+				if (!bottomLeft)
+					if (!bottomRight)
+						return true;*/
+		if (bottomRight || bottomLeft) {
+			System.out.println("collision");
+			return true;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public void die() {
+		dead = true;
+		velocity.x = 0.0;
+		velocity.y = 0.0;
+		
+		//
+		Game.setState(GameState.Credits);
 	}
 	
 	public int[] getMiddle() {
@@ -147,14 +208,5 @@ public class Player extends Entity {
 		return rotation;
 	}
 
-	@Override
-	public void die() {
-		dead = true;
-		velocity.x = 0.0;
-		velocity.y = 0.0;
-		
-		//
-		Game.setState(GameState.Credits);
-	}
 
 }

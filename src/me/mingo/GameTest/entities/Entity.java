@@ -12,7 +12,7 @@ public abstract class Entity implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public abstract void draw(Graphics2D g2);
-	public abstract void update();
+	public abstract void update(double deltaTime);
 	public abstract void die();
 	
 	public abstract double getSpeed();

@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,6 +24,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import me.mingo.GameTest.entities.Entity;
+import me.mingo.GameTest.entities.Player;
 import me.mingo.GameTest.utils.Keyboard;
 import me.mingo.GameTest.utils.Mouse;
 import me.mingo.GameTest.utils.Utils;
@@ -43,7 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public static int tilesHorizontal = tileSize * Window.WIDTH;
 	public static int tilesVertical = tileSize * Window.HEIGHT;
 	
-	final double UPDATE_TIME = 1.0/60.0;
+	final double UPDATE_TIME = 1.0/120.0;
 	
 	Thread thread;
 	Timer timer;
@@ -55,15 +57,16 @@ public class GamePanel extends JPanel implements Runnable {
 	//						//
 	//////////////////////////
 	
-	public static final boolean testMode = false;
+	public static final boolean testMode = true;
 	
 	// world generation
-	long seed = new Random().nextLong();
-	int worldSize = Window.WIDTH/tileSize;
-	World world = new World(seed, worldSize);
+	static long seed = new Random().nextLong();
+	static int worldSize = Window.WIDTH/tileSize;
 	
 	double frequency = 10;
 	double smoothness = 0.05;
+	
+	public static World world = new World(seed, worldSize);
 	
 	// time
 	int TIME = 0;
@@ -73,7 +76,8 @@ public class GamePanel extends JPanel implements Runnable {
 	public static int sunMovementSpeed = 1250;
 	
 	// player
-	public static double playerSpeed = 1;
+	public static double playerSpeed = 5;
+	public static Player player = new Player(100, 100, 1, GamePanel.playerSpeed);
 	public static final int renderDistance = 250; // number of blocks rendered
 	
 	//////////////////////////////
@@ -89,11 +93,6 @@ public class GamePanel extends JPanel implements Runnable {
 		setFocusable(true);
 		
 		loadWorld();
-		
-		if (testMode) {
-			engageTestMode();
-		}
-		
 		start();
 	}
 	
@@ -105,69 +104,6 @@ public class GamePanel extends JPanel implements Runnable {
 		world.spawnStartingEntities();
 		
 		//Utils.saveWorldData(world);
-	}
-	
-	//////////////////
-	//				//
-	//	Test Mode	//
-	//				//
-	//////////////////
-	private void engageTestMode() {
-		// multiplier
-		JSlider frequencySlider = new JSlider();
-		frequencySlider.setToolTipText("Change multiplier");
-		frequencySlider.setMinimum(0);
-		frequencySlider.setMaximum(100);
-		frequencySlider.setValue((int) frequency);
-		frequencySlider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				frequency = frequencySlider.getValue();
-				world.generate(frequency, smoothness);
-			}
-		});
-		add(frequencySlider);
-		
-		// smoothness
-		JSlider smoothnessSlider = new JSlider();
-		smoothnessSlider.setToolTipText("Change smoothness");
-		smoothnessSlider.setMinimum(0);
-		smoothnessSlider.setMaximum(10);
-		smoothnessSlider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				smoothness = smoothnessSlider.getValue()*0.01;
-				world.generate(frequency, smoothness);
-			}
-		});
-		add(smoothnessSlider);
-		
-		// zoom
-		JButton zoomIn = new JButton("Zoom In");
-		zoomIn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				zoom(1);
-				
-				// update tiles
-				tilesHorizontal = tileSize * Window.WIDTH;
-				tilesVertical = tileSize * Window.HEIGHT;
-			}
-		});
-		add(zoomIn);
-		
-		JButton zoomOut = new JButton("Zoom Out");
-		zoomOut.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				zoom(-1);
-				
-				// update tiles
-				tilesHorizontal = tileSize * Window.WIDTH;
-				tilesVertical = tileSize * Window.HEIGHT;
-			}
-		});
-		add(zoomOut);
 	}
 	
 	private void zoom(int intensity) {
@@ -206,17 +142,43 @@ public class GamePanel extends JPanel implements Runnable {
 	public void run() {
 		
 		boolean shouldRender = true;
-		long frameRate = (long) (UPDATE_TIME*750);
+		long frameRate = (long) (UPDATE_TIME*1000);
 		
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
+			
+			// so all these variables are for calculating the time between each frame (delta time)
+			double lastTime = System.currentTimeMillis();
+			double currentTime = 0.0;
+			double deltaTime = 0.0;
+			
+			// wow calculation of fps
+			int frames = 0;
+			double lastFpsCheck = System.currentTimeMillis();
+			double fps = 0.0;
 
 			@Override
 			public void run() {
 				if (shouldRender) {
-					update();
 					
-					repaint();
+					// delta time stuff
+					currentTime = System.currentTimeMillis();
+					deltaTime = (currentTime - lastTime) * 0.1;
+					lastTime = currentTime;
+					
+					// fps calculation of independence
+					frames++;
+					if (System.currentTimeMillis() > lastFpsCheck + 1000) {
+						lastFpsCheck = System.currentTimeMillis();
+						fps = frames;
+						frames = 0;
+						
+						//System.out.println("fps " + fps);
+					}
+					
+					update(deltaTime*0.5); // update entity locations and such
+					repaint(); // repaint the screen
+					
 				} else {
 					try {
 						Thread.sleep(1);
@@ -228,6 +190,21 @@ public class GamePanel extends JPanel implements Runnable {
 			
 		}, 0, frameRate);
 		
+		/*double lastTime = System.currentTimeMillis();
+		double currentTime;
+		double deltaTime;
+		
+		while (true) {
+			currentTime = System.currentTimeMillis();
+			deltaTime = currentTime - lastTime;
+			
+			if (deltaTime >= UPDATE_TIME*750) {
+				update(deltaTime);
+				repaint();
+				lastTime = currentTime;
+			}
+		}*/
+		
 	}
 	
 	//////////////////////////////
@@ -235,14 +212,16 @@ public class GamePanel extends JPanel implements Runnable {
 	//	Update entity locations	//
 	//							//
 	//////////////////////////////
-	public void update() {
+	public void update(double deltaTime) {
 		Mouse.updateMousePosition();
+		
+		System.out.println(deltaTime);
 		
 		for (int i = 0; i < world.entities.size(); i++) {
 			Entity entity = world.entities.get(i);
 			
 			checkCollision(entity);
-			entity.update();
+			entity.update(deltaTime);
 		}
 		
 		// update zoom
@@ -264,30 +243,67 @@ public class GamePanel extends JPanel implements Runnable {
 	//						//
 	//////////////////////////
 	private void checkCollision(Entity entity) {
-		Block[] nearbySurfaceBlocks = getNearbySurfaceBlocks(entity, 5);
+		ArrayList<Block> nearbySurfaceBlocks = getNearbySurfaceBlocks(entity, 15);
 		
-		for (int j = 0; j < nearbySurfaceBlocks.length; j++) {
-			Block block = nearbySurfaceBlocks[j];
+		for (int j = 0; j < nearbySurfaceBlocks.size(); j++) {
+			Block block = nearbySurfaceBlocks.get(j);
 			
-			if (entity.getBounds().intersects(block.getBounds())) {
-				// block collision
-				System.out.println("block collision");
-				
-				//entity.die();
-				
-				// make entity unable to pass through the wall
-				
-				
+			if (block.isSolid) { // only check collision if the block is solid
+				if (entity.getBounds().intersects(block.getBounds())) { // checking if a block is hit
+					
+					//System.out.println("block collision"); // alerting the console
+					
+					// make entity unable to pass through the wall
+					
+					
+				}
 			}
 		}
 	}
 	
-	private Block[] getNearbySurfaceBlocks(Entity entity, int accuracy) {
+	private ArrayList<Block> getNearbySurfaceBlocks(Entity entity, int accuracy) {
 		// algorithm to find nearby surface blocks with a curtain accuracy (how many blocks will be checked)
 		
+		// divide by 16
+		int x = (int) (player.x*0.0625); // TODO: change to entity.getX()
 		
-		Block[] nearbySurfaceBlocks = new Block[] {};
-		return world.blocks;
+		ArrayList<Block> nearbySurfaceBlocks = new ArrayList<>();
+		
+		if (testMode) {
+			for (int i = 0; i < world.blocks.length; i++) {
+				Block b = world.blocks[i];
+				
+				if (b.highlighted) {
+					b.highlighted = false;
+				}
+			}
+		}
+		
+		for (int i = 0; i < accuracy*0.5; i++) {
+			try {
+				Block b = world.blocks[x+i];
+				nearbySurfaceBlocks.add(b);
+				
+				Block b2 = world.blocks[x-i];
+				if (i > 0) {
+					nearbySurfaceBlocks.add(b2);
+				}
+				
+				if (testMode) {
+					b.highlighted = true;
+					b2.highlighted = true;
+				}
+			} catch (ArrayIndexOutOfBoundsException e) {
+				
+			}
+		}
+		
+		// highlight nearby surface blocks
+		/*for (int i = 0; i < nearbySurfaceBlocks.length; i++) {
+			nearbySurfaceBlocks[i].highlighted = true;
+		}*/
+		
+		return nearbySurfaceBlocks;
 	}
 	
 	//////////////////////////////////////////////////////////

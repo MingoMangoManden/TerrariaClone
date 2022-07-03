@@ -14,12 +14,14 @@ public class Block implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public Location loc;
+	public boolean isSolid;
 	public Colors mat;
 	
 	public boolean highlighted = false;
 	
-	public Block(Location loc, Colors mat) {
+	public Block(Location loc, boolean solid, Colors mat) {
 		this.loc = loc;
+		this.isSolid = solid;
 		this.mat = mat;
 	}
 	
